@@ -3,13 +3,16 @@ import sys
 import pygame
 import sqlite3
 import random
+
 score1 = 0
 vil = False
 noj = 0
+nojei = 0
 level = 0
 stad = 1
+popad = False
 brevno1 = pygame.image.load('doska.png')
-brevno = pygame.transform.scale(brevno1, (215, 215))
+brevno = pygame.transform.scale(brevno1, (180, 180))
 knife1 = pygame.image.load('knife.png')
 knife = pygame.transform.scale(knife1, (180, 180))
 b = 0
@@ -26,8 +29,8 @@ mask1 = pygame.mask.from_surface(brevno)
 brevno_w = pygame.sprite.Sprite(brevno_g)
 brevno_w.image = brevno
 brevno_w.rect = brevno_w.image.get_rect()
-brevno_w.rect.x = 636
-brevno_w.rect.y = 365
+brevno_w.rect.x = 650
+brevno_w.rect.y = 390
 knife_s1 = pygame.sprite.Sprite()
 knife_s2 = pygame.sprite.Sprite()
 knife_s3 = pygame.sprite.Sprite()
@@ -50,6 +53,8 @@ knife_s19 = pygame.sprite.Sprite()
 s = [knife_s1, knife_s2, knife_s3, knife_s4, knife_s5, knife_s6, knife_s7, knife_s8, knife_s9,
      knife_s10, knife_s11, knife_s12, knife_s13, knife_s14, knife_s15, knife_s16, knife_s17,
      knife_s18, knife_s19]
+s2 = []
+s3 = []
 
 
 class Rastav:
@@ -102,7 +107,6 @@ class Rastav:
         knife11 = pygame.transform.scale(knife21, (425, 425))
         screen.blit(knife11, (530, 225))
 
-
     def game_ras(self):
         payza = pygame.image.load("payza.png")
         payza1 = pygame.transform.scale(payza, (90, 90))
@@ -124,10 +128,49 @@ class Rastav:
         rot_rect.center = brevno12.get_rect().center
         rot_image = brevno12.subsurface(rot_rect).copy()
         brevno_w.image = rot_image
+        for j in range(len(s2)):
+            # pass
+            orig_rect = knife.get_rect()
+            knife12 = pygame.transform.rotate(knife, b)
+            rot_rect = orig_rect.copy()
+            rot_rect.center = knife12.get_rect().center
+            # print(rot_rect.center)
+            # image = pygame.transform.rotate(knife, b)
+            # rect = image.get_rect()
+            # rect.center = (650, 550)
+            # rot_image = image.subsurface(rect).copy()
+            # s[j].image = rot_image
+            # w, h = 180, 180
+            # img2 = pygame.Surface((w * 2, h * 2), pygame.SRCALPHA)
+            # pos = (100, 100)
+            # img2.blit(knife, (w - pos[0], h - pos[1]))
+            # knife12 = pygame.transform.rotate(img2, b)
+            rot_image = knife12.subsurface(rot_rect).copy()
+            s[j].image = rot_image
+            if 0 <= b <= 90:
+                s[j].rect = s[j].image.get_rect()
+                s[j].rect.x = s3[j][0] + 2
+                s[j].rect.y = s3[j][1] - 2
+                s3[j] = (s3[j][0] + 2, s3[j][1] - 2)
+            elif 90 < b < 180:
+                s[j].rect = s[j].image.get_rect()
+                s[j].rect.x = s3[j][0] - 2
+                s[j].rect.y = s3[j][1] - 2
+                s3[j] = (s3[j][0] - 2, s3[j][1] - 2)
+                print(b)
+            elif 180 < b < 270:
+                s[j].rect = s[j].image.get_rect()
+                s[j].rect.x = s3[j][0] - 2
+                s[j].rect.y = s3[j][1] + 2
+                s3[j] = (s3[j][0] - 2, s3[j][1] + 2)
+            elif 270 < b <= 360:
+                s[j].rect = s[j].image.get_rect()
+                s[j].rect.x = s3[j][0] + 2
+                s[j].rect.y = s3[j][1] + 2
+                s3[j] = (s3[j][0] + 2, s3[j][1] + 2)
         knife_g1.draw(screen)
-        knife_g2.draw(screen)
         brevno_g.draw(screen)
-
+        knife_g2.draw(screen)
 
     def lose_ras(self):
         pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (440, 250, 700, 450))
@@ -282,12 +325,25 @@ if __name__ == '__main__':
                         payza = False
                         lose = False
         if game:
-            b = b + 2 + (level * 1)
+            b += 2
+            if b >= 360:
+                b -= 360
         dsdsdasd = knife_w.rect.y
         if dsdsdasd <= 405:
             vil = False
             knife_w.rect.x = 650
             knife_w.rect.y = 705
             score1 += 1
+            sound1 = pygame.mixer.Sound('wood1.wav')
+            sound1.play()
+            if not popad:
+                s[nojei] = pygame.sprite.Sprite(knife_g2)
+                s[nojei].image = knife
+                s[nojei].rect = s[nojei].image.get_rect()
+                s[nojei].rect.x = 650
+                s[nojei].rect.y = 480
+                nojei = nojei + 1
+            s2.append(b)
+            s3.append((650, 480))
         Rastav(meny, game, payza, res, score1, lose)
         pygame.display.flip()
