@@ -8,22 +8,24 @@ score1 = 0
 vil = False
 noj = 0
 nojei = 0
-level = 0
-stad = 1
+nojei2 = 7
+level = 1
 popad = False
 brevno1 = pygame.image.load('doska.png')
 brevno = pygame.transform.scale(brevno1, (180, 180))
-knife1 = pygame.image.load('knife.png')
+knife1 = pygame.image.load('knife1.png')
 knife = pygame.transform.scale(knife1, (180, 180))
+mask = pygame.mask.from_surface(knife)
 b = 0
 knife_g1 = pygame.sprite.Group()
 knife_g2 = pygame.sprite.Group()
 brevno_g = pygame.sprite.Group()
-mask = pygame.mask.from_surface(knife)
 knife_w = pygame.sprite.Sprite(knife_g1)
 knife_w.image = knife
+knife_w1 = pygame.transform.rotate(knife, -45)
+knife_w.image = knife_w1
 knife_w.rect = knife_w.image.get_rect()
-knife_w.rect.x = 650
+knife_w.rect.x = 610
 knife_w.rect.y = 705
 mask1 = pygame.mask.from_surface(brevno)
 brevno_w = pygame.sprite.Sprite(brevno_g)
@@ -51,10 +53,9 @@ knife_s17 = pygame.sprite.Sprite()
 knife_s18 = pygame.sprite.Sprite()
 knife_s19 = pygame.sprite.Sprite()
 s = [knife_s1, knife_s2, knife_s3, knife_s4, knife_s5, knife_s6, knife_s7, knife_s8, knife_s9,
-     knife_s10, knife_s11, knife_s12, knife_s13, knife_s14, knife_s15, knife_s16, knife_s17,
-     knife_s18, knife_s19]
+     knife_s10, knife_s11]
 s2 = []
-s3 = []
+m21 = False
 
 
 class Rastav:
@@ -120,6 +121,18 @@ class Rastav:
         font = pygame.font.Font(None, 150)
         text = font.render(self.score, True, (255, 255, 255))
         screen.blit(text, (555, 50))
+        font = pygame.font.Font(None, 100)
+        text = font.render(str(nojei2), True, (0, 20, 0))
+        screen.blit(text, (5, 840))
+        font = pygame.font.Font(None, 100)
+        text = font.render(str(nojei2), True, (255, 255, 255))
+        screen.blit(text, (10, 835))
+        font = pygame.font.Font(None, 100)
+        text = font.render('Level ' + str(level), True, (0, 20, 0))
+        screen.blit(text, (1345, 25))
+        font = pygame.font.Font(None, 100)
+        text = font.render('Level ' + str(level), True, (255, 255, 255))
+        screen.blit(text, (1350, 20))
         if vil:
             knife_w.rect.y -= 75
         orig_rect = brevno.get_rect()
@@ -128,49 +141,24 @@ class Rastav:
         rot_rect.center = brevno12.get_rect().center
         rot_image = brevno12.subsurface(rot_rect).copy()
         brevno_w.image = rot_image
+        w, h = (180, 180)
+        box = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
+        pos = (740, 480)
         for j in range(len(s2)):
-            # pass
-            orig_rect = knife.get_rect()
-            knife12 = pygame.transform.rotate(knife, b)
-            rot_rect = orig_rect.copy()
-            rot_rect.center = knife12.get_rect().center
-            # print(rot_rect.center)
-            # image = pygame.transform.rotate(knife, b)
-            # rect = image.get_rect()
-            # rect.center = (650, 550)
-            # rot_image = image.subsurface(rect).copy()
-            # s[j].image = rot_image
-            # w, h = 180, 180
-            # img2 = pygame.Surface((w * 2, h * 2), pygame.SRCALPHA)
-            # pos = (100, 100)
-            # img2.blit(knife, (w - pos[0], h - pos[1]))
-            # knife12 = pygame.transform.rotate(img2, b)
-            rot_image = knife12.subsurface(rot_rect).copy()
-            s[j].image = rot_image
-            if 0 <= b <= 90:
-                s[j].rect = s[j].image.get_rect()
-                s[j].rect.x = s3[j][0] + 2
-                s[j].rect.y = s3[j][1] - 2
-                s3[j] = (s3[j][0] + 2, s3[j][1] - 2)
-            elif 90 < b < 180:
-                s[j].rect = s[j].image.get_rect()
-                s[j].rect.x = s3[j][0] - 2
-                s[j].rect.y = s3[j][1] - 2
-                s3[j] = (s3[j][0] - 2, s3[j][1] - 2)
-                print(b)
-            elif 180 < b < 270:
-                s[j].rect = s[j].image.get_rect()
-                s[j].rect.x = s3[j][0] - 2
-                s[j].rect.y = s3[j][1] + 2
-                s3[j] = (s3[j][0] - 2, s3[j][1] + 2)
-            elif 270 < b <= 360:
-                s[j].rect = s[j].image.get_rect()
-                s[j].rect.x = s3[j][0] + 2
-                s[j].rect.y = s3[j][1] + 2
-                s3[j] = (s3[j][0] + 2, s3[j][1] + 2)
+            box_rotate = [p.rotate(s2[j]) for p in box]
+            min_box = (
+                min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
+            max_box = (
+                max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
+            origin = (pos[0] + min_box[0], pos[1] - max_box[1])
+            s12 = pygame.transform.rotate(knife, s2[j])
+            s[j].image = s12
+            s[j].rect = s[j].image.get_rect()
+            s[j].rect.x = origin[0]
+            s[j].rect.y = origin[1]
         knife_g1.draw(screen)
-        brevno_g.draw(screen)
         knife_g2.draw(screen)
+        brevno_g.draw(screen)
 
     def lose_ras(self):
         pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (440, 250, 700, 450))
@@ -267,6 +255,7 @@ if __name__ == '__main__':
     payza = False
     lose = False
     a = None
+    najat = False
 
     while running:
         screen.fill((0, 50, 50))
@@ -281,6 +270,14 @@ if __name__ == '__main__':
                         vil = True
             if event.type == pygame.MOUSEMOTION:
                 pass
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if game:
+                        meny = False
+                        game = False
+                        res = True
+                        payza = True
+                        lose = False
             if event.type == pygame.MOUSEBUTTONUP:
                 x1, y1 = event.pos
                 if meny:
@@ -291,8 +288,11 @@ if __name__ == '__main__':
                         payza = False
                         lose = False
                         score1 = 0
-                        knife_w.rect.x = 650
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
                         knife_w.rect.y = 705
+                        s2 = []
+                        s3 = []
                     elif 1489 < x1 < 1591 and 9 < y1 < 111:
                         running = False
                 elif game:
@@ -312,11 +312,15 @@ if __name__ == '__main__':
                     elif 749 < x1 < 841 and 499 < y1 < 591:
                         meny = False
                         game = True
-                        res = True
+                        res = False
                         payza = False
                         lose = False
                         score1 = 0
-                        knife_w.rect.x = 650
+                        level = 1
+                        vil = False
+                        najat = True
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
                         knife_w.rect.y = 705
                     elif 949 < x1 < 1041 and 499 < y1 < 591:
                         meny = True
@@ -324,14 +328,39 @@ if __name__ == '__main__':
                         res = False
                         payza = False
                         lose = False
+                elif lose:
+                    if 599 < x1 < 691 and 499 < y1 < 591:
+                        meny = False
+                        game = True
+                        res = False
+                        payza = False
+                        lose = False
+                        score1 = 0
+                        level = 1
+                        vil = False
+                        najat = True
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
+                        knife_w.rect.y = 705
+                    elif 849 < x1 < 941 and 499 < y1 < 591:
+                        meny = True
+                        game = False
+                        res = False
+                        payza = False
+                        lose = False
+                        level = 1
+                        vil = False
+                        najat = True
         if game:
-            b += 2
+            b += 1 + level
+            if level >= 3:
+                b += 0.2
             if b >= 360:
                 b -= 360
         dsdsdasd = knife_w.rect.y
-        if dsdsdasd <= 405:
+        if dsdsdasd <= 480:
             vil = False
-            knife_w.rect.x = 650
+            knife_w.rect.x = 610
             knife_w.rect.y = 705
             score1 += 1
             sound1 = pygame.mixer.Sound('wood1.wav')
@@ -343,7 +372,56 @@ if __name__ == '__main__':
                 s[nojei].rect.x = 650
                 s[nojei].rect.y = 480
                 nojei = nojei + 1
-            s2.append(b)
-            s3.append((650, 480))
+                nojei2 -= 1
+            s2.append(315)
+        if game:
+            for i in range(len(s2)):
+                s2[i] += 2
+                if level >= 3:
+                    s2[i] += 0.2
+                if s2[i] >= 360:
+                    s2[i] -= 360
+        if vil:
+            m21 = False
+            for x in range(len(s2)):
+                if pygame.sprite.collide_mask(knife_w, s[x]):
+                    m21 = True
+                    sound12 = pygame.mixer.Sound('jelezo.wav')
+                    sound12.play()
+            if m21:
+                vil = False
+                meny = False
+                game = False
+                res = False
+                payza = False
+                lose = True
+                score1 = 0
+        if nojei == 6 + level:
+            nojei = 0
+            nojei2 = level + 7
+            level += 1
+            if level > 5:
+                level = 1
+                nojei = 0
+                nojei2 = level + 7
+            s2 = []
+            s3 = []
+            for i in s:
+                i.kill()
+            # if level == 2:
+            #     s[0] = pygame.sprite.Sprite(knife_g2)
+            #     s[0].image = knife
+            #     s[0].rect = s[nojei].image.get_rect()
+            #     s[0].rect.x = 650
+            #     s[0].rect.y = 480
+        if najat:
+            nojei = 0
+            nojei2 = 7
+            level = 1
+            s2 = []
+            s3 = []
+            for i in s:
+                i.kill()
+            najat = False
         Rastav(meny, game, payza, res, score1, lose)
         pygame.display.flip()
