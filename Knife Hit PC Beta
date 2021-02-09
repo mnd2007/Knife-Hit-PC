@@ -1,8 +1,5 @@
-import os
-import sys
-import pygame
+import osimport pygame
 import sqlite3
-import random
 
 score1 = 0
 vil = False
@@ -43,6 +40,462 @@ knife_s7 = pygame.sprite.Sprite()
 knife_s8 = pygame.sprite.Sprite()
 knife_s9 = pygame.sprite.Sprite()
 knife_s10 = pygame.sprite.Sprite()
+knife_s11 = pygame.sprite.Sprite()
+knife_s12 = pygame.sprite.Sprite()
+knife_s13 = pygame.sprite.Sprite()
+knife_s14 = pygame.sprite.Sprite()
+knife_s15 = pygame.sprite.Sprite()
+knife_s16 = pygame.sprite.Sprite()
+knife_s17 = pygame.sprite.Sprite()
+knife_s18 = pygame.sprite.Sprite()
+knife_s19 = pygame.sprite.Sprite()
+s = [knife_s1, knife_s2, knife_s3, knife_s4, knife_s5, knife_s6, knife_s7, knife_s8, knife_s9,
+     knife_s10, knife_s11]
+s2 = []
+m21 = False
+
+
+class Rastav:
+    def __init__(self, m, g, p, r, s, l):
+        self.meny = m
+        self.game = g
+        self.payza = p
+        self.res = r
+        self.score = str(s)
+        self.lose = l
+        if self.meny:
+            self.meny_ras()
+        elif self.game:
+            self.game_ras()
+        elif self.payza:
+            self.payza_ras()
+        elif self.lose:
+            self.lose_ras()
+
+    def meny_ras(self):
+        con = sqlite3.connect('knife_hit1')
+        cur = con.cursor()
+        result = cur.execute("""select * from score""").fetchall()
+        score = ''
+        for i in result:
+            score = str(str(i)[1:][:-2])
+        con.commit()
+        con.close()
+        for i in range(6 - len(score)):
+            score = '0' + score
+        font = pygame.font.Font(None, 75)
+        text = font.render("Your score: ", True, (0, 0, 0))
+        screen.blit(text, (605, 15))
+        font = pygame.font.Font(None, 75)
+        text = font.render("Your score: ", True, (255, 255, 255))
+        screen.blit(text, (610, 10))
+        font = pygame.font.Font(None, 150)
+        text = font.render(score, True, (0, 20, 0))
+        screen.blit(text, (555, 110))
+        font = pygame.font.Font(None, 150)
+        text = font.render(score, True, (255, 255, 255))
+        screen.blit(text, (565, 100))
+        play = pygame.image.load("play_btn.png")
+        play1 = pygame.transform.scale(play, (300, 150))
+        screen.blit(play1, (605, 680))
+        exit2 = pygame.image.load("exit.png")
+        exit1 = pygame.transform.scale(exit2, (100, 100))
+        screen.blit(exit1, (1490, 10))
+        knife21 = pygame.image.load("knife.png")
+        knife11 = pygame.transform.scale(knife21, (425, 425))
+        screen.blit(knife11, (530, 225))
+
+    def game_ras(self):
+        payza = pygame.image.load("payza.png")
+        payza1 = pygame.transform.scale(payza, (90, 90))
+        screen.blit(payza1, (10, 10))
+        score2 = 0
+        for i in range(6 - len(str(score1))):
+            self.score = '0' + self.score
+        font = pygame.font.Font(None, 150)
+        text = font.render(self.score, True, (0, 20, 0))
+        screen.blit(text, (550, 55))
+        font = pygame.font.Font(None, 150)
+        text = font.render(self.score, True, (255, 255, 255))
+        screen.blit(text, (555, 50))
+        font = pygame.font.Font(None, 100)
+        text = font.render(str(nojei2), True, (0, 20, 0))
+        screen.blit(text, (5, 840))
+        font = pygame.font.Font(None, 100)
+        text = font.render(str(nojei2), True, (255, 255, 255))
+        screen.blit(text, (10, 835))
+        font = pygame.font.Font(None, 100)
+        text = font.render('Level ' + str(level), True, (0, 20, 0))
+        screen.blit(text, (1345, 25))
+        font = pygame.font.Font(None, 100)
+        text = font.render('Level ' + str(level), True, (255, 255, 255))
+        screen.blit(text, (1350, 20))
+        if vil:
+            knife_w.rect.y -= 75
+        orig_rect = brevno.get_rect()
+        brevno12 = pygame.transform.rotate(brevno, b)
+        rot_rect = orig_rect.copy()
+        rot_rect.center = brevno12.get_rect().center
+        rot_image = brevno12.subsurface(rot_rect).copy()
+        brevno_w.image = rot_image
+        w, h = (180, 180)
+        box = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
+        pos = (740, 480)
+        for j in range(len(s2)):
+            box_rotate = [p.rotate(s2[j]) for p in box]
+            min_box = (
+                min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
+            max_box = (
+                max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
+            origin = (pos[0] + min_box[0], pos[1] - max_box[1])
+            s12 = pygame.transform.rotate(knife, s2[j])
+            s[j].image = s12
+            s[j].rect = s[j].image.get_rect()
+            s[j].rect.x = origin[0]
+            s[j].rect.y = origin[1]
+        knife_g1.draw(screen)
+        knife_g2.draw(screen)
+        brevno_g.draw(screen)
+
+    def lose_ras(self):
+        pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (440, 250, 700, 450))
+        pygame.draw.rect(screen, pygame.Color((120, 75, 30)), (450, 240, 700, 450))
+        pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (458, 252, 680, 430))
+        pygame.draw.rect(screen, pygame.Color((0, 80, 25)), (460, 250, 680, 430))
+        font = pygame.font.Font(None, 115)
+        text = font.render("Do you want to ", True, (0, 0, 0))
+        screen.blit(text, (495, 275))
+        font = pygame.font.Font(None, 115)
+        text = font.render("Do you want to ", True, (255, 255, 255))
+        screen.blit(text, (500, 270))
+        font = pygame.font.Font(None, 150)
+        text = font.render("continue ?", True, (0, 0, 0))
+        screen.blit(text, (515, 375))
+        font = pygame.font.Font(None, 150)
+        text = font.render("continue ?", True, (0, 255, 0))
+        screen.blit(text, (520, 370))
+        restart = pygame.image.load("restart.png")
+        restart1 = pygame.transform.scale(restart, (90, 90))
+        screen.blit(restart1, (600, 500))
+        menu = pygame.image.load("meni.png")
+        menu1 = pygame.transform.scale(menu, (90, 90))
+        screen.blit(menu1, (850, 500))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Restart", True, (0, 0, 0))
+        screen.blit(text, (587, 603))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Restart", True, (255, 255, 255))
+        screen.blit(text, (590, 600))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Menu", True, (0, 0, 0))
+        screen.blit(text, (845, 603))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Menu", True, (255, 255, 255))
+        screen.blit(text, (848, 600))
+
+    def payza_ras(self):
+        pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (440, 250, 700, 450))
+        pygame.draw.rect(screen, pygame.Color((120, 75, 30)), (450, 240, 700, 450))
+        pygame.draw.rect(screen, pygame.Color((0, 0, 0)), (458, 252, 680, 430))
+        pygame.draw.rect(screen, pygame.Color((0, 80, 25)), (460, 250, 680, 430))
+        font = pygame.font.Font(None, 115)
+        text = font.render("Do you want to ", True, (0, 0, 0))
+        screen.blit(text, (495, 275))
+        font = pygame.font.Font(None, 115)
+        text = font.render("Do you want to ", True, (255, 255, 255))
+        screen.blit(text, (500, 270))
+        font = pygame.font.Font(None, 150)
+        text = font.render("continue ?", True, (0, 0, 0))
+        screen.blit(text, (515, 375))
+        font = pygame.font.Font(None, 150)
+        text = font.render("continue ?", True, (0, 255, 0))
+        screen.blit(text, (520, 370))
+        play = pygame.image.load("play.png")
+        play1 = pygame.transform.scale(play, (90, 90))
+        screen.blit(play1, (550, 500))
+        restart = pygame.image.load("restart.png")
+        restart1 = pygame.transform.scale(restart, (90, 90))
+        screen.blit(restart1, (750, 500))
+        menu = pygame.image.load("meni.png")
+        menu1 = pygame.transform.scale(menu, (90, 90))
+        screen.blit(menu1, (950, 500))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Continue", True, (0, 0, 0))
+        screen.blit(text, (515, 603))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Continue", True, (255, 255, 255))
+        screen.blit(text, (518, 600))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Restart", True, (0, 0, 0))
+        screen.blit(text, (735, 603))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Restart", True, (255, 255, 255))
+        screen.blit(text, (738, 600))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Menu", True, (0, 0, 0))
+        screen.blit(text, (945, 603))
+        font = pygame.font.Font(None, 50)
+        text = font.render("Menu", True, (255, 255, 255))
+        screen.blit(text, (948, 600))
+
+
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_caption('Knife hit')
+    size = width, height = 1600, 900
+    screen = pygame.display.set_mode(size)
+
+    running = True
+    meny = True
+    game = False
+    res = False
+    payza = False
+    lose = False
+    a = None
+    najat = False
+
+    while running:
+        screen.fill((0, 50, 50))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pass
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if game:
+                        vil = True
+            if event.type == pygame.MOUSEMOTION:
+                pass
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if game:
+                        meny = False
+                        game = False
+                        res = True
+                        payza = True
+                        lose = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                x1, y1 = event.pos
+                if meny:
+                    if 604 < x1 < 906 and 679 < y1 < 829:
+                        meny = False
+                        game = True
+                        res = False
+                        payza = False
+                        lose = False
+                        score1 = 0
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
+                        knife_w.rect.y = 705
+                        s2 = []
+                        s3 = []
+                    elif 1489 < x1 < 1591 and 9 < y1 < 111:
+                        running = False
+                elif game:
+                    if 9 < x1 < 101 and 9 < y1 < 101:
+                        meny = False
+                        game = False
+                        res = True
+                        payza = True
+                        lose = False
+                elif payza:
+                    if 549 < x1 < 641 and 499 < y1 < 591:
+                        meny = False
+                        game = True
+                        res = False
+                        payza = False
+                        lose = False
+                    elif 749 < x1 < 841 and 499 < y1 < 591:
+                        meny = False
+                        game = True
+                        res = False
+                        payza = False
+                        lose = False
+                        score1 = 0
+                        level = 1
+                        vil = False
+                        najat = True
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
+                        knife_w.rect.y = 705
+                    elif 949 < x1 < 1041 and 499 < y1 < 591:
+                        meny = True
+                        game = False
+                        res = False
+                        payza = False
+                        lose = False
+                elif lose:
+                    if 599 < x1 < 691 and 499 < y1 < 591:
+                        meny = False
+                        game = True
+                        res = False
+                        payza = False
+                        lose = False
+                        score1 = 0
+                        level = 1
+                        vil = False
+                        najat = True
+                        knife_w.rect = knife_w.image.get_rect()
+                        knife_w.rect.x = 610
+                        knife_w.rect.y = 705
+                    elif 849 < x1 < 941 and 499 < y1 < 591:
+                        meny = True
+                        game = False
+                        res = False
+                        payza = False
+                        lose = False
+                        level = 1
+                        vil = False
+                        najat = True
+        if game:
+            b += 1 + level
+            if level >= 3:
+                b += 0.2
+            if b >= 360:
+                b -= 360
+        dsdsdasd = knife_w.rect.y
+        if dsdsdasd <= 480:
+            vil = False
+            knife_w.rect.x = 610
+            knife_w.rect.y = 705
+            score1 += 1
+            sound1 = pygame.mixer.Sound('wood1.wav')
+            sound1.play()
+            if not popad:
+                s[nojei] = pygame.sprite.Sprite(knife_g2)
+                s[nojei].image = knife
+                s[nojei].rect = s[nojei].image.get_rect()
+                s[nojei].rect.x = 650
+                s[nojei].rect.y = 480
+                nojei += 1
+                nojei2 -= 1
+            s2.append(315)
+        if game:
+            for i in range(len(s2)):
+                s2[i] += 2
+                if level >= 3:
+                    s2[i] += 0.2
+                if s2[i] >= 360:
+                    s2[i] -= 360
+        if vil:
+            m21 = False
+            for x in range(len(s2)):
+                if pygame.sprite.collide_mask(knife_w, s[x]):
+                    m21 = True
+                    sound12 = pygame.mixer.Sound('jelezo.wav')
+                    sound12.play()
+            if m21:
+                vil = False
+                meny = False
+                game = False
+                res = False
+                payza = False
+                lose = True
+                con = sqlite3.connect('knife_hit1')
+                cur = con.cursor()
+                result = cur.execute("""select * from score""").fetchall()
+                score2 = ''
+                for i in result:
+                    score2 = str(str(i)[1:][:-2])
+                if score1 > int(score2):
+                    cur.execute('UPDATE score SET score = ' + str(score1))
+                con.commit()
+                con.close()
+                score1 = 0
+        if nojei2 == 0:
+            nojei = 0
+            nojei2 = 7
+            level += 1
+            if level > 5:
+                level = 1
+                nojei = 0
+                nojei2 = level + 7
+            s2 = []
+            s3 = []
+            for i in s:
+                i.kill()
+            if level == 2:
+                s[0] = pygame.sprite.Sprite(knife_g2)
+                s[0].image = knife
+                s[0].rect = s[0].image.get_rect()
+                s[0].rect.x = 650
+                s[0].rect.y = 480
+                s2.append(135)
+                nojei += 1
+            if level == 3:
+                s[0] = pygame.sprite.Sprite(knife_g2)
+                s[0].image = knife
+                s[0].rect = s[0].image.get_rect()
+                s[0].rect.x = 650
+                s[0].rect.y = 480
+                s2.append(225)
+                s[1] = pygame.sprite.Sprite(knife_g2)
+                s[1].image = knife
+                s[1].rect = s[0].image.get_rect()
+                s[1].rect.x = 650
+                s[1].rect.y = 480
+                s2.append(45)
+                nojei += 2
+            if level == 4:
+                s[0] = pygame.sprite.Sprite(knife_g2)
+                s[0].image = knife
+                s[0].rect = s[0].image.get_rect()
+                s[0].rect.x = 650
+                s[0].rect.y = 480
+                s2.append(315)
+                s[1] = pygame.sprite.Sprite(knife_g2)
+                s[1].image = knife
+                s[1].rect = s[0].image.get_rect()
+                s[1].rect.x = 650
+                s[1].rect.y = 480
+                s2.append(195)
+                s[2] = pygame.sprite.Sprite(knife_g2)
+                s[2].image = knife
+                s[2].rect = s[0].image.get_rect()
+                s[2].rect.x = 650
+                s[2].rect.y = 480
+                s2.append(75)
+                nojei += 3
+            if level == 5:
+                s[0] = pygame.sprite.Sprite(knife_g2)
+                s[0].image = knife
+                s[0].rect = s[0].image.get_rect()
+                s[0].rect.x = 650
+                s[0].rect.y = 480
+                s2.append(345)
+                s[1] = pygame.sprite.Sprite(knife_g2)
+                s[1].image = knife
+                s[1].rect = s[0].image.get_rect()
+                s[1].rect.x = 650
+                s[1].rect.y = 480
+                s2.append(315)
+                s[2] = pygame.sprite.Sprite(knife_g2)
+                s[2].image = knife
+                s[2].rect = s[0].image.get_rect()
+                s[2].rect.x = 650
+                s[2].rect.y = 480
+                s2.append(165)
+                s[3] = pygame.sprite.Sprite(knife_g2)
+                s[3].image = knife
+                s[3].rect = s[0].image.get_rect()
+                s[3].rect.x = 650
+                s[3].rect.y = 480
+                s2.append(135)
+                nojei += 4
+        if najat:
+            nojei = 0
+            nojei3 = 0
+            nojei2 = 7
+            level = 1
+            s2 = []
+            s3 = []
+            for i in s:
+                i.kill()
+            najat = False
+        Rastav(meny, game, payza, res, score1, lose)
+        pygame.display.flip()
+
 knife_s11 = pygame.sprite.Sprite()
 knife_s12 = pygame.sprite.Sprite()
 knife_s13 = pygame.sprite.Sprite()
